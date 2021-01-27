@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    private UnityEngine.AI.NavMeshAgent pathfinder;
+    private NavMeshAgent pathfinder;
     private Transform target;
 
     void Start()
     {
-        pathfinder = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        pathfinder = GetComponent<NavMeshAgent>();
         target = GameObject.Find("Player").transform;
     }
     void Update()

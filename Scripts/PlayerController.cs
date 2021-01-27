@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 0;
+    public TextMeshProUGUI countText;
+    public GameObject winTextObject;
 
     private Rigidbody rb;
-
+    private int count;
     private float movementX;
     private float movementY;
 
@@ -16,9 +19,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        count = 0;
+
+        SetCountText();
+        winTextObject.SetActive(false);
     }
 
-    private void OnMove(InputValue movementValue)
+    void OnMove(InputValue movementValue)
     {
         Vector2 movementVector = movementValue.Get<Vector2>();
 
@@ -26,7 +33,16 @@ public class PlayerController : MonoBehaviour
         movementY = movementVector.y;
     }
 
-    private void FixedUpdate()
+    void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+        if (count >= 12)
+        {
+            winTextObject.SetActive(true);
+        }
+    }
+
+    void FixedUpdate()
     {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
@@ -38,7 +54,15 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-        }
-    }
+            count = count + 1;
 
+            SetCountText();
+        }
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            this.transform.position = new Vector3 (0,1,0);
+            other.gameObject.transform.position = new Vector3(Random.Range(5, 9), 1, Random.Range(5, 9));
+        }
+
+    }
 }
